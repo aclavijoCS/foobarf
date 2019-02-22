@@ -103,7 +103,7 @@ export class FooBarAlg {
     // Mine
     if (
       this.materialsContainer.foo.length <=
-      this.materialsContainer.bar.length ||
+        this.materialsContainer.bar.length ||
       this.money >= 3
     ) {
       m = <Foo>await r.mine(MATERIAL_TYPE.FOO);
@@ -119,7 +119,8 @@ export class FooBarAlg {
   computeNumberSellersBuyersMax(): void {
     // Compute number Sellers
     const nb = Math.floor(this.materialsContainer.foobar.length / 5);
-    this.generalStatus.numberSellers = nb < 1 ? 1 : nb;
+    this.generalStatus.numberSellers =
+      nb < 1 ? (this.materialsContainer.foobar.length >= 3 ? 1 : 0) : nb;
 
     // Compute number buyers
     const nbM = Math.floor(this.money / 3);
@@ -151,8 +152,9 @@ export class FooBarAlg {
       this.money
     }, [Nb Sellers Max]: ${
       this.generalStatus.numberSellers
-    }, [Nb Buyer(s) Max]: ${this.generalStatus.numberBuyers
-    }, [Nb FooBar Max] ${this.generalStatus.numberFooBar}\n
+    }, [Nb Buyer(s) Max]: ${this.generalStatus.numberBuyers}, [Nb FooBar Max] ${
+      this.generalStatus.numberFooBar
+    }\n
             [Mateials]: Foo: ${this.materialsContainer.foo.length}, Bar: ${
       this.materialsContainer.bar.length
     }, FooBar: ${this.materialsContainer.foobar.length}
