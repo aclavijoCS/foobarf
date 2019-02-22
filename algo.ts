@@ -129,8 +129,8 @@ export class FooBarAlg {
     //Compute number FooBar Creation
     this.generalStatus.numberFooBar =
       this.materialsContainer.bar.length >= this.materialsContainer.foo.length
-        ? this.materialsContainer.bar.length
-        : this.materialsContainer.foo.length;
+        ? this.materialsContainer.foo.length
+        : this.materialsContainer.bar.length;
   }
 
   reinit(): void {
