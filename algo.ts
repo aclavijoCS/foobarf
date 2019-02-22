@@ -16,8 +16,10 @@ export class FooBarAlg {
   private generalStatus = {
     isRobotBuying: 0,
     isRobotSelling: 0,
+    isRobotFooBar: 0,
     numberSellers: 0,
-    numberBuyers: 0
+    numberBuyers: 0,
+    numberFooBar: 0
   };
   private robotContainer: Robot[] = [];
   private materialsContainer: MaterialContainer = {
@@ -34,6 +36,7 @@ export class FooBarAlg {
     const robotFactory = RobotFactory.getInstance();
     this.robotContainer.push(robotFactory.create());
     this.robotContainer.push(robotFactory.create());
+    this.reinit;
   }
 
   async main() {
@@ -83,8 +86,10 @@ export class FooBarAlg {
     // Create FooBar
     if (
       this.materialsContainer.foo.length >= 2 &&
-      this.materialsContainer.bar.length >= 2
+      this.materialsContainer.bar.length >= 2 &&
+      this.generalStatus.isRobotFooBar < this.generalStatus.numberFooBar
     ) {
+      this.generalStatus.isRobotFooBar += 1;
       const foo = this.materialsContainer.foo.splice(0, 1)[0];
       const bar = this.materialsContainer.bar.splice(0, 1)[0];
       m = <AssembleResult>await r.assemble(foo, bar);
@@ -121,13 +126,23 @@ export class FooBarAlg {
     const nbM = Math.floor(this.money / 3);
     const nbF = Math.floor(this.materialsContainer.foo.length / 6);
     this.generalStatus.numberBuyers = nbM >= nbF ? nbF : nbM;
+
+    //Compute number FooBar Creation
+    this.generalStatus.numberFooBar =
+      this.materialsContainer.bar.length >= this.materialsContainer.foo.length
+        ? this.materialsContainer.bar.length
+        : this.materialsContainer.foo.length;
   }
 
   reinit(): void {
-    this.generalStatus.isRobotBuying = 0;
-    this.generalStatus.isRobotSelling = 0;
-    this.generalStatus.numberBuyers = 0;
-    this.generalStatus.numberSellers = 0;
+    this.generalStatus = {
+      isRobotBuying: 0,
+      isRobotSelling: 0,
+      isRobotFooBar: 0,
+      numberSellers: 0,
+      numberBuyers: 0,
+      numberFooBar: 0
+    };
   }
 
   loggingInfo(): void {

@@ -44,7 +44,7 @@ export class Robot implements RobotAction {
    * If not, move the robot
    * @param pos
    */
-  async checkPosition(pos: number) {
+  async checkPosition(pos: number): Promise<boolean> {
     if (this.position !== pos) {
       await this.move();
       this.position = pos;
@@ -56,7 +56,7 @@ export class Robot implements RobotAction {
   /**
    * Move action
    */
-  async move() {
+  async move(): Promise<any> {
     await this.timeout(TIMES.MOVE);
   }
 
@@ -64,7 +64,7 @@ export class Robot implements RobotAction {
    * Robot mining sequence
    * @param type
    */
-  async mine(type: number) {
+  async mine(type: number): Promise<Foo|Bar|null> {
     await this.checkPosition(POSITION.MINING);
     switch (type) {
       case 1:
@@ -83,7 +83,7 @@ export class Robot implements RobotAction {
    * @param foo
    * @param bar
    */
-  async assemble(foo: Foo, bar: Bar) {
+  async assemble(foo: Foo, bar: Bar): Promise<AssembleResult> {
     await this.checkPosition(POSITION.ASSEMBLING);
     await this.timeout(TIMES.ASSEMBLE);
 
@@ -105,7 +105,7 @@ export class Robot implements RobotAction {
    * Sell robot sequence
    * @param foobars
    */
-  async sell(foobars: FooBar[]) {
+  async sell(foobars: FooBar[]): Promise<number> {
     await this.checkPosition(POSITION.SELL);
     await this.timeout(TIMES.SELL);
 
@@ -116,7 +116,7 @@ export class Robot implements RobotAction {
    * Buy robot sequence
    * @param robotFactory
    */
-  async buyRobot(robotFactory: RobotFactory) {
+  async buyRobot(robotFactory: RobotFactory): Promise<Robot> {
     await this.checkPosition(POSITION.BUY);
     return Promise.resolve(robotFactory.create());
   }
