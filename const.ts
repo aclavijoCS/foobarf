@@ -2,11 +2,11 @@
  * Time in milliseconds
  */
 export enum TIMES {
-    MOVE = 20000,
-    MINE_FOO = 1000,
-    MINE_BAR = generateBarTime(0.5, 2) * 1000,
-    ASSEMBLE = 2000,
-    SELL = 10000,
+  MOVE = 20000,
+  MINE_FOO = 1000,
+  MINE_BAR = generateBarTime(0.5, 2) * 1000,
+  ASSEMBLE = 2000,
+  SELL = 10000
 }
 
 // Test timers
@@ -19,15 +19,15 @@ export enum TIMES {
 }*/
 
 export enum MATERIAL_TYPE {
-    FOO = 1,
-    BAR = 2
+  FOO = 1,
+  BAR = 2
 }
 
 export enum POSITION {
-    MINING = 1,
-    ASSEMBLING = 2,
-    SELL = 3,
-    BUY = 4
+  MINING = 1,
+  ASSEMBLING = 2,
+  SELL = 3,
+  BUY = 4
 }
 
 /**
@@ -36,5 +36,5 @@ export enum POSITION {
  * @param e end
  */
 function generateBarTime(s: number, e: number): number {
-    return Math.random() * (e - 1) + s;
+  return Math.random() * (e - 1) + s;
 }

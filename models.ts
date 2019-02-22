@@ -1,125 +1,123 @@
-import { MaterialFactory, RobotFactory } from './factories';
-import { TIMES, POSITION } from './const';
+import { MaterialFactory, RobotFactory } from "./factories";
+import { TIMES, POSITION } from "./const";
 
 abstract class BaseFooBar {
-    private id: string;
+  private id: string;
 
-    constructor(id: string) {
-        this.id = id;
-    }
+  constructor(id: string) {
+    this.id = id;
+  }
 
-    getId(): string {
-        return this.id;
-    }
+  getId(): string {
+    return this.id;
+  }
 }
 
 export class Foo extends BaseFooBar {}
 export class Bar extends BaseFooBar {}
 export class FooBar extends BaseFooBar {}
 
-
 export interface RobotAction {
-    move: Function;
-    mine: Function;
-    assemble: Function;
-    sell: Function;
-    buyRobot: Function;
+  move: Function;
+  mine: Function;
+  assemble: Function;
+  sell: Function;
+  buyRobot: Function;
 }
 
 export interface AssembleResult {
-    success: number;
-    rest: BaseFooBar
+  success: number;
+  rest: BaseFooBar;
 }
 
 export class Robot implements RobotAction {
-    position = 0;
+  position = 0;
 
-    constructor(private materialFactory: MaterialFactory) {}
+  constructor(private materialFactory: MaterialFactory) {}
 
-    timeout(ms: number): Promise<any> {
-        return new Promise(resolve => setTimeout(resolve, ms));
+  timeout(ms: number): Promise<any> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Check if the robot is at the right position
+   * If not, move the robot
+   * @param pos
+   */
+  async checkPosition(pos: number) {
+    if (this.position !== pos) {
+      await this.move();
+      this.position = pos;
     }
 
-    /**
-     * Check if the robot is at the right position
-     * If not, move the robot
-     * @param pos 
-     */
-    async checkPosition(pos: number) {
-        if (this.position !== pos) {
-            await this.move();
-            this.position = pos;
-        }
+    return Promise.resolve(true);
+  }
 
-        return Promise.resolve(true);
+  /**
+   * Move action
+   */
+  async move() {
+    await this.timeout(TIMES.MOVE);
+  }
+
+  /**
+   * Robot mining sequence
+   * @param type
+   */
+  async mine(type: number) {
+    await this.checkPosition(POSITION.MINING);
+    switch (type) {
+      case 1:
+        await this.timeout(TIMES.MINE_FOO);
+        return this.materialFactory.createFoo();
+      case 2:
+        await this.timeout(TIMES.MINE_BAR);
+        return this.materialFactory.createBar();
+      default:
+        return null;
     }
+  }
 
-    /**
-     * Move action
-     */
-    async move() {
-        await this.timeout(TIMES.MOVE);
+  /**
+   * Robot assemble sequence
+   * @param foo
+   * @param bar
+   */
+  async assemble(foo: Foo, bar: Bar) {
+    await this.checkPosition(POSITION.ASSEMBLING);
+    await this.timeout(TIMES.ASSEMBLE);
+
+    // Failed
+    if (Math.random() < 0.4) {
+      return {
+        success: 0,
+        rest: bar
+      };
+    } else {
+      return {
+        success: 1,
+        rest: this.materialFactory.createFooBar(foo, bar)
+      };
     }
+  }
 
-    /**
-     * Robot mining sequence
-     * @param type 
-     */
-    async mine(type: number) {
-        await this.checkPosition(POSITION.MINING);
-        switch(type) {
-            case 1: 
-                await this.timeout(TIMES.MINE_FOO);
-                return this.materialFactory.createFoo();
-            case 2:
-                await this.timeout(TIMES.MINE_BAR);
-                return this.materialFactory.createBar();
-            default:
-                return null;
-        }
-    }
+  /**
+   * Sell robot sequence
+   * @param foobars
+   */
+  async sell(foobars: FooBar[]) {
+    await this.checkPosition(POSITION.SELL);
+    await this.timeout(TIMES.SELL);
 
-    /**
-     * Robot assemble sequence
-     * @param foo 
-     * @param bar 
-     */
-    async assemble(foo: Foo, bar: Bar) {
-        await this.checkPosition(POSITION.ASSEMBLING);
-        await this.timeout(TIMES.ASSEMBLE);
+    return foobars.length;
+  }
 
-        // Failed
-        if (Math.random() < 0.4) {
-            return {
-                success: 0,
-                rest: bar
-            };
-        } else {
-            return {
-                success: 1,
-                rest: this.materialFactory.createFooBar(foo, bar)
-            };
-        }
-    }
-
-    /**
-     * Sell robot sequence
-     * @param foobars 
-     */
-    async sell(foobars: FooBar[]) {
-        await this.checkPosition(POSITION.SELL);
-        await this.timeout(TIMES.SELL);
-        
-
-        return foobars.length;
-    }
-
-    /**
-     * Buy robot sequence
-     * @param robotFactory 
-     */
-    async buyRobot(robotFactory: RobotFactory) {
-        await this.checkPosition(POSITION.BUY);
-        return Promise.resolve(robotFactory.create());
-    }
+  /**
+   * Buy robot sequence
+   * @param robotFactory
+   */
+  async buyRobot(robotFactory: RobotFactory) {
+    await this.checkPosition(POSITION.BUY);
+    return Promise.resolve(robotFactory.create());
+  }
 }
