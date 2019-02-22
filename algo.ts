@@ -103,7 +103,7 @@ export class FooBarAlg {
     // Mine
     if (
       this.materialsContainer.foo.length <=
-        this.materialsContainer.bar.length ||
+      this.materialsContainer.bar.length ||
       this.money >= 3
     ) {
       m = <Foo>await r.mine(MATERIAL_TYPE.FOO);
@@ -151,7 +151,8 @@ export class FooBarAlg {
       this.money
     }, [Nb Sellers Max]: ${
       this.generalStatus.numberSellers
-    }, [Nb Buyer(s) Max]: ${this.generalStatus.numberBuyers} \n
+    }, [Nb Buyer(s) Max]: ${this.generalStatus.numberBuyers
+    }, [Nb FooBar Max] ${this.generalStatus.numberFooBar}\n
             [Mateials]: Foo: ${this.materialsContainer.foo.length}, Bar: ${
       this.materialsContainer.bar.length
     }, FooBar: ${this.materialsContainer.foobar.length}
