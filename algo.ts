@@ -58,10 +58,10 @@ export class FooBarAlg {
       this.generalStatus.isRobotSelling < this.generalStatus.numberBuyers
     ) {
       this.generalStatus.isRobotSelling += 1;
-      const robot = await r.buyRobot(RobotFactory.getInstance());
-      this.robotContainer = [...this.robotContainer, robot];
       this.money = this.money - 3;
       this.materialsContainer.foo.splice(0, 6);
+      const robot = await r.buyRobot(RobotFactory.getInstance());
+      this.robotContainer = [...this.robotContainer, robot];
 
       return Promise.resolve(true);
     }

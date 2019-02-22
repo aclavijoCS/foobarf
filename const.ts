@@ -10,7 +10,7 @@ export enum TIMES {
 }
 
 // Test timers
-/**export enum TIMES {
+/*export enum TIMES {
     MOVE = 200,
     MINE_FOO = 10,
     MINE_BAR = generateBarTime(0.5, 2) * 10,
