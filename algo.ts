@@ -36,7 +36,6 @@ export class FooBarAlg {
     const robotFactory = RobotFactory.getInstance();
     this.robotContainer.push(robotFactory.create());
     this.robotContainer.push(robotFactory.create());
-    this.reinit;
   }
 
   async main() {
